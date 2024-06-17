@@ -26,7 +26,7 @@ static void terminate_game() {
 }
 
 static void init_game() {
-    pc_player* player1 = pc_init_human_player(PC_PLAYERINPUT_MOUSE);
+    pc_player* player1 = pc_init_com_player(PC_COMLEVEL_IMP);
     pc_player* player2 = pc_init_com_player(PC_COMLEVEL_EASY);
 
     pc_spawn_player(player1);
@@ -80,7 +80,7 @@ void adjust_player_position(pc_player* player) {
     int ww, wh;
     SDL_GetWindowSize(pc_state.window, &ww, &wh);
 
-    player->bbox.x = player->side == PC_PLAYERSIDE_LEFT ? 50 : ww - 50.f;
+    player->bbox.x = player->team == PC_TEAM_LEFT ? 50 : ww - 50.f;
     player->bbox.y = wh / 2.f;
     // We subtract the y position of the player with half of the height.
     // This centers the rectangle.
@@ -92,12 +92,12 @@ pc_player* pc_spawn_player(pc_player* _player) {
         printf("Cannot spawn player. (Limit reached: %i)", PC_PLAYER_LIMIT);
         return NULL;
     }
-    
+
     _player->index = pc_state.game.players_idx;
 
     // Checks if the player index is a modulus of 2. Is true, the side is right, else is left.
     // This allows easy implementation of multiple players. (Not implemented yet)
-    _player->side = (_player->index + 1) % 2 != 0 ? PC_PLAYERSIDE_RIGHT : PC_PLAYERSIDE_LEFT;
+    _player->team = (_player->index + 1) % 2 != 0 ? PC_TEAM_RIGHT : PC_TEAM_LEFT;
 
     adjust_player_position(_player);
 
@@ -110,7 +110,7 @@ pc_player* pc_spawn_player(pc_player* _player) {
 void resize_screen_bb() {
     int ww, wh;
     SDL_GetWindowSize(pc_state.window, &ww, &wh);
-    
+
     /*
      *  [0] top-left    -> bottom-left
      *  [1] top-left    -> top-right

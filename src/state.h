@@ -7,18 +7,24 @@
 
 #define PC_PLAYER_LIMIT 2
 
+typedef uint32_t score;
+
 struct pc_state_t {
     SDL_Window*   window;
     SDL_Renderer* renderer;
 
     int running;
-    struct {    
-        int started;    
+    struct {
+        int started;
 
         int players_idx;
         pc_player* players[PC_PLAYER_LIMIT];
 
         pc_ball* ball;
+
+        // Teams are defined as the sides the players are in themselves.
+        // Left is index 0 and right is index 1.
+        score teams[2];
     } game;
 
     // Contains the screen's boundaries. Its main purpose is to stop the ball from getting out of boundaries.

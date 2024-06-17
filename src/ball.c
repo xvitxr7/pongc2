@@ -37,15 +37,15 @@ void pc_update_ball(pc_ball* ball) {
     for (int i = 0; i < PC_PLAYER_LIMIT; i++) {
         pc_player* p = pc_state.game.players[i];
         if (!p) continue;
-        
-        if ((p->side > 0 && ball->ax > 0) || (p->side < 0 && ball->ax < 0)) {
+
+        if ((p->team == PC_TEAM_RIGHT && ball->ax > 0) || (p->team == PC_TEAM_LEFT && ball->ax < 0)) {
             pd = p;
         }
     }
 
     if (!pd) return;
 
-    float player_x1 = pd->side == PC_PLAYERSIDE_LEFT ? pd->bbox.x + pd->bbox.w : pd->bbox.x;
+    float player_x1 = pd->team == PC_TEAM_LEFT ? pd->bbox.x + pd->bbox.w : pd->bbox.x;
     float player_y1 = pd->bbox.y;
     float player_x2 = pd->bbox.x + pd->bbox.w;
     float player_y2 = pd->bbox.y + pd->bbox.h;
@@ -63,13 +63,18 @@ void pc_update_ball(pc_ball* ball) {
         const pc_bbox* left_w  = &pc_state.screen_b[0];
         const pc_bbox* right_w = &pc_state.screen_b[2];
 
+        int score = (pc_is_colliding(left_w, &ball->bbox) || pc_is_colliding(right_w, &ball->bbox)) ||
+                    (ball->bbox.x > right_w->x || ball->bbox.x < 0);
+
         if (pc_is_colliding(up_w, &ball->bbox) || pc_is_colliding(down_w, &ball->bbox)) {
             ball->ay *= -1;
         }
 
-        else if (pc_is_colliding(left_w, &ball->bbox) || pc_is_colliding(right_w, &ball->bbox)) {
-            // TODO: Score system.
+        else if (score) {
+            pc_teams team = pd->team == PC_TEAM_LEFT ? PC_TEAM_RIGHT : PC_TEAM_LEFT;
+            pc_state.game.teams[team]++;
             pc_reset_game();
+            printf("Player [%i] scored! [%ix%i]", pd->index, pc_state.game.teams[0], pc_state.game.teams[1]);
         }
     }
 }

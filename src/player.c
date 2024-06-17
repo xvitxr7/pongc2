@@ -95,6 +95,10 @@ void pc_player_com(pc_player* player) {
         player->com_l = PC_COMLEVEL_MEDIUM;
         return;
     }
+    // At this point, is easier to just set the player y to be exacly the ball's y.
+    else if (player->com_l > 100) {
+        player->bbox.y = ball->bbox.y - player->bbox.h / 2.f;
+    }
 
     int up_coll, down_coll;
     {

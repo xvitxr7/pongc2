@@ -15,24 +15,22 @@ typedef enum {
     PC_PLAYERTYPE_COM
 } pc_player_type;
 
-typedef enum {
-    PC_PLAYERSIDE_LEFT = -1,
-    PC_PLAYERSIDE_RIGHT = 1,
-    PC_PLAYERSIDE_NONE = 0
-} pc_player_side;
-
 typedef float pc_com_level;
 #define PC_COMLEVEL_EASY   7
 #define PC_COMLEVEL_MEDIUM 13
 #define PC_COMLEVEL_HARD   19
 #define PC_COMLEVEL_IMP    INT32_MAX // 🤓
 
+typedef enum {
+    PC_TEAM_LEFT,
+    PC_TEAM_RIGHT
+} pc_teams;
 
 typedef struct {
     uint8_t   index;
     pc_bbox bbox;
 
-    pc_player_side side;
+    pc_teams team;
 
     pc_player_type type;
     pc_player_input_type input_type;
