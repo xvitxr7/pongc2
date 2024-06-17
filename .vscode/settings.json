@@ -1,0 +1,9 @@
+{
+    "cmake.buildDirectory": "${workspaceFolder}/bin",
+    "cmake.debugConfig": {
+        "console": "internalConsole",
+        "args": [
+            "--draw-bboxes"
+        ]
+    }
+}
