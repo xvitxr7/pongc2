@@ -396,3 +396,12 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+# Visual Studio Code
+.vscode/
+
+# clangd
+.cache/
+compile_commands.json
+
+# Binaries
+bin/
