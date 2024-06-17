@@ -54,6 +54,7 @@ static void handle_key_down(SDL_KeyboardEvent *kevent) {
     pc_state.running = 0;
     break;
 
+  /* Increases the ball's velocity */
   case SDLK_EQUALS:
   case SDLK_PLUS:
   case SDLK_KP_PLUS: {
@@ -61,20 +62,24 @@ static void handle_key_down(SDL_KeyboardEvent *kevent) {
     pc_state.game.ball->ay *= PC_BALL_HIT_MULTIPLIER;
   } break;
 
+  /* Decreases the ball's velocity */
   case SDLK_MINUS:
   case SDLK_KP_MINUS: {
     pc_state.game.ball->ax /= PC_BALL_HIT_MULTIPLIER;
     pc_state.game.ball->ay /= PC_BALL_HIT_MULTIPLIER;
   } break;
 
+  /* Starts the game */
   case SDLK_SPACE: {
     pc_state.game.started = 1;
   } break;
 
+  /* Resets the game to its intitial state */
   case SDLK_r: {
     pc_reset_game();
   } break;
 
+  /* Increases the second player's comlevel (difficulty) (Only if the second player is a PC_PLAYERTYPE_COM) */
   case SDLK_g: {
     pc_state.game.players[1]->com_l++;
   } break;
