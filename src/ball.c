@@ -67,8 +67,9 @@ void pc_update_ball(pc_ball* ball) {
             ball->ay *= -1;
         }
 
-        else {
+        else if (pc_is_colliding(left_w, &ball->bbox) || pc_is_colliding(right_w, &ball->bbox)) {
             // TODO: Score system.
+            pc_reset_game();
         }
     }
 }
