@@ -90,7 +90,7 @@ void pc_player_control(pc_player* player) {
 
 void pc_player_com(pc_player* player) {
     pc_ball* ball = pc_state.game.ball;
-    
+
     if (player->com_l < 0) {
         player->com_l = PC_COMLEVEL_MEDIUM;
         return;
