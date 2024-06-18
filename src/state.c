@@ -72,7 +72,6 @@ void pc_quit() {
 
 pc_ball* pc_spawn_ball(float radius) {
     pc_state.game.ball = pc_init_ball(radius);
-    
     return pc_state.game.ball;
 }
 
@@ -89,7 +88,7 @@ void adjust_player_position(pc_player* player) {
 
 pc_player* pc_spawn_player(pc_player* _player) {
     if (pc_state.game.players_idx + 1 >= PC_PLAYER_LIMIT) {
-        printf("Cannot spawn player. (Limit reached: %i)", PC_PLAYER_LIMIT);
+        printf("Cannot spawn player. (Limit reached: %i)\n", PC_PLAYER_LIMIT);
         return NULL;
     }
 
@@ -114,7 +113,7 @@ void resize_screen_bb() {
     /*
      *  [0] top-left    -> bottom-left
      *  [1] top-left    -> top-right
-     *  [2] top-right   -> bottom-right 
+     *  [2] top-right   -> bottom-right
      *  [3] bottom-left -> bottom-right
      */
 
@@ -139,7 +138,7 @@ void resize_screen_bb() {
     pc_state.screen_b[3].h = 10;
 }
 
-static void update_game_elements() {
+void pc_update_window_size() {
     int ww, wh;
     SDL_GetWindowSize(pc_state.window, &ww, &wh);
 
@@ -154,17 +153,12 @@ static void update_game_elements() {
     }
 
     /* Ball */
+    if (!pc_state.game.started)
     {
         pc_state.game.ball->bbox.x = ww / 2.f - pc_state.game.ball->bbox.w / 2;
         pc_state.game.ball->bbox.y = wh / 2.f - pc_state.game.ball->bbox.h / 2;
     }
-}
 
-void pc_update_window_size() {
-    if (!pc_state.game.started) {
-        update_game_elements();
-    }
-    
     /* Screen Boundaries Box */
     resize_screen_bb();
 }
