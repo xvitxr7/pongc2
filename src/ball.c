@@ -3,6 +3,7 @@
 #include "player.h"
 #include "primitives.h"
 #include "state.h"
+#include <SDL2/SDL_mouse.h>
 #include <SDL2/SDL_render.h>
 #include <stdint.h>
 
@@ -74,7 +75,23 @@ void pc_update_ball(pc_ball* ball) {
             pc_teams team = pd->team == PC_TEAM_LEFT ? PC_TEAM_RIGHT : PC_TEAM_LEFT;
             pc_state.game.teams[team]++;
             pc_reset_game();
-            printf("Player [%i] scored! [%ix%i]", pd->index, pc_state.game.teams[0], pc_state.game.teams[1]);
+            printf("Player [%i] scored! [%ix%i]\n", pd->index, pc_state.game.teams[0], pc_state.game.teams[1]);
+        }
+    }
+
+    {
+        int mx, my;
+        uint32_t button = SDL_GetMouseState(&mx, &my);
+
+        pc_bbox mouse;
+        mouse.w = 10;
+        mouse.h = 10;
+        mouse.x = mx;
+        mouse.y = my;
+
+        if (pc_is_colliding(&mouse, &pc_state.game.ball->bbox) && SDL_BUTTON(button) == SDL_BUTTON_LEFT) {
+            pc_state.game.ball->bbox.x = mouse.x - pc_state.game.ball->bbox.w / 2.f;
+            pc_state.game.ball->bbox.y = mouse.y - pc_state.game.ball->bbox.h / 2.f;
         }
     }
 }
