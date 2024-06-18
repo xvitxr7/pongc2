@@ -1,5 +1,8 @@
 #include "event.h"
+#include "common.h"
 #include "state.h"
+#include <SDL2/SDL_events.h>
+#include <SDL2/SDL_mouse.h>
 
 static void handle_window_events(SDL_WindowEvent *wevent) {
   switch (wevent->event) {
@@ -10,7 +13,7 @@ static void handle_window_events(SDL_WindowEvent *wevent) {
   }
 }
 
-static void handle_key_down(SDL_KeyboardEvent *kevent) {
+static void handle_key_down(SDL_KeyboardEvent* kevent) {
   switch (kevent->keysym.sym) {
     case SDLK_ESCAPE: {
       pc_state.running = 0;
@@ -49,7 +52,11 @@ static void handle_key_down(SDL_KeyboardEvent *kevent) {
   }
 }
 
-static void handle_key_up(SDL_KeyboardEvent *kevent) {
+static void handle_mouse_click(SDL_MouseButtonEvent* bevent) {
+
+}
+
+static void handle_key_up(SDL_KeyboardEvent* kevent) {
     // Nothing for now.
 }
 
@@ -57,9 +64,10 @@ void pc_handle_events() {
   static SDL_Event ev;
   while (SDL_PollEvent(&ev)) {
     switch (ev.type) {
-    case SDL_WINDOWEVENT: handle_window_events(&ev.window); break;
-    case SDL_KEYDOWN:     handle_key_down(&ev.key);         break;
-    case SDL_KEYUP:       handle_key_up(&ev.key);           break;
+    case SDL_WINDOWEVENT:     handle_window_events(&ev.window); break;
+    case SDL_KEYDOWN:         handle_key_down(&ev.key);         break;
+    case SDL_KEYUP:           handle_key_up(&ev.key);           break;
+    case SDL_MOUSEBUTTONDOWN: handle_mouse_click(&ev.button);   break;
     // Stops the game loop.
     case SDL_QUIT:        pc_state.running = 0; break;
     }
