@@ -1,7 +1,6 @@
 #pragma once
 
 #include "common.h"
-#include "primitives.h"
 #include <stdint.h>
 
 typedef enum {

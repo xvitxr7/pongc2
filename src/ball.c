@@ -1,7 +1,6 @@
 #include "ball.h"
 #include "common.h"
 #include "player.h"
-#include "primitives.h"
 #include "state.h"
 #include <SDL2/SDL_mouse.h>
 #include <SDL2/SDL_render.h>
@@ -96,7 +95,22 @@ void pc_update_ball(pc_ball* ball) {
     }
 }
 
+static void fill_circle(int32_t _cx, int32_t _cy, int32_t radius) {
+    for (int w = 0; w < radius * 2; w++)
+    {
+        for (int h = 0; h < radius * 2; h++)
+        {
+            int dx = radius - w; // horizontal offset
+            int dy = radius - h; // vertical offset
+            if ((dx*dx + dy*dy) <= (radius * radius))
+            {
+                SDL_RenderDrawPoint(pc_state.renderer, _cx + dx, _cy + dy);
+            }
+        }
+    }
+}
+
 void pc_draw_ball() {
     SDL_SetRenderDrawColor(pc_state.renderer, 255, 255, 255, 255);
-    pc_fill_circle(pc_state.game.ball->bbox.x + pc_state.game.ball->bbox.w / 2, pc_state.game.ball->bbox.y + pc_state.game.ball->bbox.h / 2, pc_state.game.ball->radius);
+    fill_circle(pc_state.game.ball->bbox.x + pc_state.game.ball->bbox.w / 2, pc_state.game.ball->bbox.y + pc_state.game.ball->bbox.h / 2, pc_state.game.ball->radius);
 }
