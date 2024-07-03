@@ -405,3 +405,8 @@ compile_commands.json
 
 # Binaries
 bin/
+/CMakePresets.json
+/compile_commands.json
+/vcpkg-configuration.json
+/vcpkg.json
+/out/build/x64-Debug

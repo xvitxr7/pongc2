@@ -13,5 +13,9 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS True)
 file(GLOB_RECURSE PC_SRC "src/*.c")
 
 add_executable(pongc ${PC_SRC})
-target_link_libraries(pongc PUBLIC SDL2 SDL2_image SDL2_ttf)
+
+find_package(json-c CONFIG REQUIRED)
+find_package(SDL2 CONFIG REQUIRED)
+find_package(SDL2_ttf CONFIG REQUIRED)
+target_link_libraries(pongc PRIVATE SDL2::SDL2 SDL2_ttf::SDL2_ttf json-c::json-c)
 target_include_directories(pongc PUBLIC include)

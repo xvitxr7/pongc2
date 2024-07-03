@@ -1,5 +1,6 @@
 #include "ball.h"
 #include "event.h"
+#include "font.h"
 #include "player.h"
 #include "state.h"
 #include <SDL2/SDL_events.h>
@@ -16,7 +17,7 @@ static void draw_bboxes() {
   for (int i = 0; i <= pc_state.game.players_idx; i++) {
     pc_player *player = pc_state.game.players[i];
 
-    if (pc_state.flags.draw_bb) {
+    if (pc_state.flags[PC_FLAG_DRAW_BBOXES]) {
       SDL_SetRenderDrawColor(pc_state.renderer, 255, 0, 0, 255);
       SDL_RenderDrawRectF(pc_state.renderer, &player->bbox);
     }
@@ -64,14 +65,17 @@ static void run() {
     if (pc_state.game.started == 1)
       pc_update_ball(pc_state.game.ball);
 
-    SDL_SetRenderDrawColor(pc_state.renderer, 25, 0, 100, 255);
+    SDL_SetRenderDrawColor(pc_state.renderer, pc_state.bg_color.r, pc_state.bg_color.g, pc_state.bg_color.b, pc_state.bg_color.a);
     SDL_RenderClear(pc_state.renderer);
 
     pc_draw_ball();
     // Draw the players.
     draw_players();
 
-    if (pc_state.flags.draw_bb)
+    SDL_SetRenderDrawColor(pc_state.renderer, pc_state.bg_color.r - 10, pc_state.bg_color.g - 10, pc_state.bg_color.b - 10, pc_state.bg_color.a);
+    pc_draw_text("Text rendering is working!", 10, 10, 4);
+
+    if (pc_state.flags[PC_FLAG_DRAW_BBOXES])
       draw_bboxes();
 
     SDL_RenderPresent(pc_state.renderer);
@@ -81,11 +85,12 @@ static void run() {
 static void process_opts(int argc, char **argv) {
   for (int i = 0; i < argc; i++) {
     if (PC_HAS_OPT(argv[i], "--draw-bboxes")) {
-      pc_state.flags.draw_bb = 1;
+      pc_state.flags[PC_FLAG_DRAW_BBOXES] = 1;
     }
   }
 }
 
+#undef main
 int main(int argc, char **argv) {
   process_opts(argc, argv);
 

@@ -11,7 +11,7 @@
 
 pc_ball* pc_init_ball(float radius) {
     pc_ball* ball = (pc_ball*) malloc(sizeof(pc_ball));
-    
+
     int direction = (rand() % 14) - 7;
     ball->ax = direction;
     ball->ay = (direction % 2 == 0 ? 1 : -1) * direction;
@@ -20,10 +20,10 @@ pc_ball* pc_init_ball(float radius) {
     SDL_GetWindowSize(pc_state.window, &ww, &wh);
 
     ball->radius = radius;
-    
+
     ball->bbox.w = radius * 2;
     ball->bbox.h = radius * 2;
-    
+
     return ball;
 }
 

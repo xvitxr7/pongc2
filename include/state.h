@@ -6,8 +6,13 @@
 #include "ball.h"
 
 #define PC_PLAYER_LIMIT 2
+#define PC_FLAGS_COUNT 2 // Placeholder
+
+#define PC_FLAG_DRAW_BBOXES 0
+#define PC_FLAG_DEBUG_FONT 1
 
 typedef uint32_t score;
+typedef SDL_Color pc_color;
 
 struct pc_state_t {
     SDL_Window*   window;
@@ -29,11 +34,10 @@ struct pc_state_t {
 
     // Contains the screen's boundaries. Its main purpose is to stop the ball from getting out of boundaries.
     pc_bbox screen_b[4];
+    // Background color.
+    pc_color bg_color;
 
-    struct {
-        // Determines if PongC will draw its object's bounding boxes.
-        int draw_bb;
-    } flags;
+    int flags[PC_FLAGS_COUNT];
 };
 
 extern struct pc_state_t pc_state;

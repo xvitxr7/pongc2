@@ -2,7 +2,9 @@
 #include "common.h"
 #include "state.h"
 #include <SDL2/SDL_events.h>
+#include <SDL2/SDL_keyboard.h>
 #include <SDL2/SDL_mouse.h>
+#include <string.h>
 
 static void handle_window_events(SDL_WindowEvent *wevent) {
   switch (wevent->event) {
@@ -48,7 +50,16 @@ static void handle_key_down(SDL_KeyboardEvent* kevent) {
     case SDLK_g: {
       pc_state.game.players[1]->com_l++;
     } break;
-
+    
+    case SDLK_1: {
+        pc_state.bg_color.r += 10;
+    } break;
+    case SDLK_2: {
+        pc_state.bg_color.g += 10;
+    } break;
+    case SDLK_3: {
+        pc_state.bg_color.b += 10;
+    } break;
   }
 }
 

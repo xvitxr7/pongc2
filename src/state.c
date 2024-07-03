@@ -1,5 +1,6 @@
 #include "state.h"
 #include "ball.h"
+#include "font.h"
 #include "player.h"
 #include <SDL2/SDL_render.h>
 #include <SDL2/SDL_video.h>
@@ -52,11 +53,25 @@ int pc_init() {
         &pc_state.window, &pc_state.renderer
     ) == 0, "Failed to initialize PongC's window and/or renderer.");
 
+    set_window_props();
+
+    pc_init_font();
+
     pc_state.running = 0;
+
+    pc_state.bg_color.r = 25;
+    pc_state.bg_color.g = 0;
+    pc_state.bg_color.b = 100;
+    pc_state.bg_color.a = 255;
+
+    // Disables all flags.
+    for (int i = 0; i < PC_FLAGS_COUNT; i++) {
+        pc_state.flags[i] = 0;
+    }
 
     // Enables VSync.
     SDL_RenderSetVSync(pc_state.renderer, 1);
-    
+
     pc_reset_game();
 
     return 0;

@@ -4,7 +4,7 @@
 		{
 			"type": "cmake",
 			"label": "CMake: build",
-			"command": "",
+			"command": "build",
 			"targets": [
 				"all"
 			],
