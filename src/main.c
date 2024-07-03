@@ -68,12 +68,12 @@ static void run() {
     SDL_SetRenderDrawColor(pc_state.renderer, pc_state.bg_color.r, pc_state.bg_color.g, pc_state.bg_color.b, pc_state.bg_color.a);
     SDL_RenderClear(pc_state.renderer);
 
+    SDL_SetRenderDrawColor(pc_state.renderer, pc_state.bg_color.r - 10, pc_state.bg_color.g - 10, pc_state.bg_color.b - 10, pc_state.bg_color.a);
+    pc_draw_text("PongC2 - made by @xvitxr7", 10, 10, 4);
+
     pc_draw_ball();
     // Draw the players.
     draw_players();
-
-    SDL_SetRenderDrawColor(pc_state.renderer, pc_state.bg_color.r - 10, pc_state.bg_color.g - 10, pc_state.bg_color.b - 10, pc_state.bg_color.a);
-    pc_draw_text("Text rendering is working!", 10, 10, 4);
 
     if (pc_state.flags[PC_FLAG_DRAW_BBOXES])
       draw_bboxes();
