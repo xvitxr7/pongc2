@@ -419,7 +419,7 @@ void pc_draw_text(const char* _text, float _x, float _y, uint32_t _scale) {
 
         if (c == '\n') {
             _x = ix;
-            iy += height * _scale + _scale;
+            _y += height * _scale + _scale;
             continue;
         }
 
