@@ -403,8 +403,8 @@ void draw_char(char c, float _x, float _y, uint32_t _scale) {
 }
 
 void pc_draw_text(const char* _text, float _x, float _y, uint32_t _scale) {
-    char buf[4096];
-    strcpy_s(buf, 4096, _text);
+    char buf[strlen(_text)];
+    strcpy(buf, _text);
 
     // The initial parameters.
     float ix = _x, iy = _y;

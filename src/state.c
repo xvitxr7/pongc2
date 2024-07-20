@@ -4,11 +4,33 @@
 #include "player.h"
 #include <SDL2/SDL_render.h>
 #include <SDL2/SDL_video.h>
+#include <SDL_mouse.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <sys/types.h>
 
-// Sets the main window's properties like title, minimum and maximum size, etc. 
+static void random_window_name() {
+    char* rand_win_names[5] = {
+        "Cool asf!",
+        "C is awesome",
+        "the chaddest game",
+        "better than tetris", // lol
+        "SDL rules!",
+    };
+
+    int mx, my;
+    SDL_GetGlobalMouseState(&mx, &my);
+    srand(mx * my);
+
+    char win_name[128];
+    sprintf(win_name, "PongC - %s", rand_win_names[rand() % 5]);
+
+    SDL_SetWindowTitle(pc_state.window, win_name);
+}
+
+// Sets the main window's properties like title, minimum and maximum size, etc.
 static void set_window_props() {
-    SDL_SetWindowTitle(pc_state.window, "PongC * Game");
+    random_window_name();
     SDL_SetWindowMinimumSize(pc_state.window, 192, 108);
 }
 
@@ -42,10 +64,18 @@ void pc_reset_game() {
     pc_update_window_size();
 }
 
+static void process_opts(int argc, char **argv) {
+  for (int i = 0; i < argc; i++) {
+    if (PC_HAS_OPT(argv[i], "--draw-bboxes")) {
+      pc_state.flags[PC_FLAG_DRAW_BBOXES] = 1;
+    }
+  }
+}
+
 // Allocates and initializes PongC's resources.
-int pc_init() {
-    assertm(!(SDL_Init(SDL_INIT_TIMER | SDL_INIT_VIDEO | SDL_INIT_SENSOR) != 0), "SDL failed to initialize.");
-    assertm(TTF_Init() == 0, "TTF failed to initialize.");
+int pc_init(int argc, char** argv) {
+    assertm(SDL_Init(SDL_INIT_TIMER | SDL_INIT_VIDEO | SDL_INIT_SENSOR) == 0, "SDL failed to initialize.");
+    // assertm(TTF_Init() == 0, "TTF failed to initialize.");
 
     assertm(SDL_CreateWindowAndRenderer(
         800, 500,
@@ -59,15 +89,19 @@ int pc_init() {
 
     pc_state.running = 0;
 
-    pc_state.bg_color.r = 25;
+    pc_state.bg_color.r = 0;
     pc_state.bg_color.g = 0;
-    pc_state.bg_color.b = 100;
+    pc_state.bg_color.b = 0;
     pc_state.bg_color.a = 255;
+
+    // pc_state.ui = pc_init_ui();
 
     // Disables all flags.
     for (int i = 0; i < PC_FLAGS_COUNT; i++) {
         pc_state.flags[i] = 0;
     }
+
+    process_opts(argc, argv);
 
     // Enables VSync.
     SDL_RenderSetVSync(pc_state.renderer, 1);
@@ -88,6 +122,13 @@ void pc_quit() {
 pc_ball* pc_spawn_ball(float radius) {
     pc_state.game.ball = pc_init_ball(radius);
     return pc_state.game.ball;
+}
+
+void pc_score(int points, pc_teams team)
+{
+    pc_state.game.teams[team]++;
+    pc_reset_game();
+    printf("Player scored! [%ix%i]\n", pc_state.game.teams[0], pc_state.game.teams[1]);
 }
 
 void adjust_player_position(pc_player* player) {
@@ -132,25 +173,25 @@ void resize_screen_bb() {
      *  [3] bottom-left -> bottom-right
      */
 
-    pc_state.screen_b[0].x = -10;
-    pc_state.screen_b[0].y = 0;
-    pc_state.screen_b[0].w = 10;
-    pc_state.screen_b[0].h = wh;
+    pc_state.window_b[0].x = -10;
+    pc_state.window_b[0].y = 0;
+    pc_state.window_b[0].w = 10;
+    pc_state.window_b[0].h = wh;
 
-    pc_state.screen_b[1].x = 0;
-    pc_state.screen_b[1].y = -10;
-    pc_state.screen_b[1].w = ww;
-    pc_state.screen_b[1].h = 10;
+    pc_state.window_b[1].x = 0;
+    pc_state.window_b[1].y = -10;
+    pc_state.window_b[1].w = ww;
+    pc_state.window_b[1].h = 10;
 
-    pc_state.screen_b[2].x = ww;
-    pc_state.screen_b[2].y = 0;
-    pc_state.screen_b[2].w = 10;
-    pc_state.screen_b[2].h = wh;
+    pc_state.window_b[2].x = ww;
+    pc_state.window_b[2].y = 0;
+    pc_state.window_b[2].w = 10;
+    pc_state.window_b[2].h = wh;
 
-    pc_state.screen_b[3].x = 0;
-    pc_state.screen_b[3].y = wh;
-    pc_state.screen_b[3].w = ww;
-    pc_state.screen_b[3].h = 10;
+    pc_state.window_b[3].x = 0;
+    pc_state.window_b[3].y = wh;
+    pc_state.window_b[3].w = ww;
+    pc_state.window_b[3].h = 10;
 }
 
 void pc_update_window_size() {

@@ -1,8 +1,9 @@
 #include "player.h"
+#include "font.h"
 #include "state.h"
 #include <SDL2/SDL_keyboard.h>
 #include <SDL2/SDL_render.h>
-
+#include <stdio.h>
 
 pc_player* init_player(pc_player_type _player_type, pc_player_input_type _input_type, pc_com_level _com_l)  {
     pc_player* player = (pc_player*) malloc(sizeof(pc_player));
@@ -37,6 +38,14 @@ pc_player* pc_init_com_player(pc_com_level _com_l) {
 void pc_draw_player(const pc_player *player) {
     SDL_SetRenderDrawColor(pc_state.renderer, 255, 255, 255, 255);
     SDL_RenderFillRectF(pc_state.renderer, &player->bbox);
+
+    {
+        char scoreText[10];
+        sprintf(scoreText, "%i", pc_state.game.teams[player->team]);
+
+        SDL_SetRenderDrawColor(pc_state.renderer, 0, 0, 0, 255);
+        pc_draw_text(scoreText, player->bbox.x, player->bbox.y + player->bbox.h / 2, 5 / strlen(scoreText));
+    }
 }
 
 void pc_player_control(pc_player* player) {
@@ -45,13 +54,13 @@ void pc_player_control(pc_player* player) {
 
     int up_coll, down_coll;
     {
-        const pc_bbox* up_w    = &pc_state.screen_b[1];
-        const pc_bbox* down_w  = &pc_state.screen_b[3];
+        const pc_bbox* up_w    = &pc_state.window_b[1];
+        const pc_bbox* down_w  = &pc_state.window_b[3];
 
         up_coll   = pc_is_colliding(up_w, &player->bbox);
         down_coll = pc_is_colliding(down_w, &player->bbox);
     }
-    
+
     const uint8_t* keys = SDL_GetKeyboardState(NULL);
     switch (player->input_type) {
         case PC_PLAYERINPUT_ARROWS:
@@ -102,8 +111,8 @@ void pc_player_com(pc_player* player) {
 
     int up_coll, down_coll;
     {
-        const pc_bbox* up_w    = &pc_state.screen_b[1];
-        const pc_bbox* down_w  = &pc_state.screen_b[3];
+        const pc_bbox* up_w    = &pc_state.window_b[1];
+        const pc_bbox* down_w  = &pc_state.window_b[3];
 
         up_coll   = pc_is_colliding(up_w, &player->bbox);
         down_coll = pc_is_colliding(down_w, &player->bbox);
@@ -115,7 +124,7 @@ void pc_player_com(pc_player* player) {
     if (ball->bbox.y < top_most && !up_coll) {
         player->bbox.y -= player->com_l;
     }
-    
+
     else if (ball->bbox.y > bottom_most && !down_coll) {
         player->bbox.y += player->com_l;
     }

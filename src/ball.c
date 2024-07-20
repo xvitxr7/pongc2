@@ -4,6 +4,8 @@
 #include "state.h"
 #include <SDL2/SDL_mouse.h>
 #include <SDL2/SDL_render.h>
+#include <SDL_keyboard.h>
+#include <SDL_scancode.h>
 #include <stdint.h>
 
 #include <math.h>
@@ -56,12 +58,12 @@ void pc_update_ball(pc_ball* ball) {
         ball->ay *= PC_BALL_HIT_MULTIPLIER;
     }
 
-    // Checks collisions with the screen's boundaries, causing the ball's y direction to flip.
+    // Checks collisions with the window boundaries, causing the ball y direction to flip.
     {
-        const pc_bbox* up_w    = &pc_state.screen_b[1];
-        const pc_bbox* down_w  = &pc_state.screen_b[3];
-        const pc_bbox* left_w  = &pc_state.screen_b[0];
-        const pc_bbox* right_w = &pc_state.screen_b[2];
+        const pc_bbox* up_w    = &pc_state.window_b[1];
+        const pc_bbox* down_w  = &pc_state.window_b[3];
+        const pc_bbox* left_w  = &pc_state.window_b[0];
+        const pc_bbox* right_w = &pc_state.window_b[2];
 
         int score = (pc_is_colliding(left_w, &ball->bbox) || pc_is_colliding(right_w, &ball->bbox)) ||
                     (ball->bbox.x > right_w->x || ball->bbox.x < 0);
@@ -72,9 +74,7 @@ void pc_update_ball(pc_ball* ball) {
 
         else if (score) {
             pc_teams team = pd->team == PC_TEAM_LEFT ? PC_TEAM_RIGHT : PC_TEAM_LEFT;
-            pc_state.game.teams[team]++;
-            pc_reset_game();
-            printf("Player [%i] scored! [%ix%i]\n", pd->index, pc_state.game.teams[0], pc_state.game.teams[1]);
+            pc_score(1, team);
         }
     }
 
@@ -82,15 +82,11 @@ void pc_update_ball(pc_ball* ball) {
         int mx, my;
         uint32_t button = SDL_GetMouseState(&mx, &my);
 
-        pc_bbox mouse;
-        mouse.w = 10;
-        mouse.h = 10;
-        mouse.x = mx;
-        mouse.y = my;
+        const uint8_t* keys = SDL_GetKeyboardState(NULL);
 
-        if (pc_is_colliding(&mouse, &pc_state.game.ball->bbox) && SDL_BUTTON(button) == SDL_BUTTON_LEFT) {
-            pc_state.game.ball->bbox.x = mouse.x - pc_state.game.ball->bbox.w / 2.f;
-            pc_state.game.ball->bbox.y = mouse.y - pc_state.game.ball->bbox.h / 2.f;
+        if (keys[SDL_SCANCODE_X]) {
+            pc_state.game.ball->bbox.x = mx - pc_state.game.ball->bbox.w / 2.f;
+            pc_state.game.ball->bbox.y = my - pc_state.game.ball->bbox.h / 2.f;
         }
     }
 }
