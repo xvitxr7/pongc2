@@ -49,8 +49,8 @@ static void terminate_game() {
 }
 
 static void init_game() {
-    pc_player* player1 = pc_init_com_player(PC_COMLEVEL_IMP);
-    pc_player* player2 = pc_init_com_player(PC_COMLEVEL_EASY);
+    pc_player* player1 = pc_init_human_player(PC_PLAYERINPUT_MODERN);
+    pc_player* player2 = pc_init_human_player(PC_PLAYERINPUT_ARROWS);
 
     pc_spawn_player(player1);
     pc_spawn_player(player2);
