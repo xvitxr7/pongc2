@@ -18,9 +18,6 @@ static void random_window_name() {
         "still waiting for SDL3",
     };
 
-    // Dirtiest random seed ever
-    int mx, my;
-    SDL_GetGlobalMouseState(&mx, &my);
     srand(9999);
 
     char win_name[128];
