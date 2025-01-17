@@ -60,10 +60,10 @@ void pc_update_ball(pc_ball* ball) {
 
     // Checks collisions with the window boundaries, causing the ball y direction to flip.
     {
-        const pc_bbox* up_w    = &pc_state.window_b[1];
-        const pc_bbox* down_w  = &pc_state.window_b[3];
-        const pc_bbox* left_w  = &pc_state.window_b[0];
-        const pc_bbox* right_w = &pc_state.window_b[2];
+        const pc_rect* up_w    = &pc_state.window_b[1];
+        const pc_rect* down_w  = &pc_state.window_b[3];
+        const pc_rect* left_w  = &pc_state.window_b[0];
+        const pc_rect* right_w = &pc_state.window_b[2];
 
         int score = (pc_is_colliding(left_w, &ball->bbox) || pc_is_colliding(right_w, &ball->bbox)) ||
                     (ball->bbox.x > right_w->x || ball->bbox.x < 0);

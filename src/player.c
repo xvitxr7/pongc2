@@ -54,8 +54,8 @@ void pc_player_control(pc_player* player) {
 
     int up_coll, down_coll;
     {
-        const pc_bbox* up_w    = &pc_state.window_b[1];
-        const pc_bbox* down_w  = &pc_state.window_b[3];
+        const pc_rect* up_w    = &pc_state.window_b[1];
+        const pc_rect* down_w  = &pc_state.window_b[3];
 
         up_coll   = pc_is_colliding(up_w, &player->bbox);
         down_coll = pc_is_colliding(down_w, &player->bbox);
@@ -111,8 +111,8 @@ void pc_player_com(pc_player* player) {
 
     int up_coll, down_coll;
     {
-        const pc_bbox* up_w    = &pc_state.window_b[1];
-        const pc_bbox* down_w  = &pc_state.window_b[3];
+        const pc_rect* up_w    = &pc_state.window_b[1];
+        const pc_rect* down_w  = &pc_state.window_b[3];
 
         up_coll   = pc_is_colliding(up_w, &player->bbox);
         down_coll = pc_is_colliding(down_w, &player->bbox);

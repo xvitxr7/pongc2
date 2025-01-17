@@ -13,9 +13,6 @@
 
 #define PC_HAS_OPT(str, opt) strcmp(str, opt) > 0
 
-typedef uint32_t score;
-typedef SDL_Color pc_color;
-
 struct pc_state_t {
     SDL_Window*   window;
     SDL_Renderer* renderer;
@@ -35,7 +32,7 @@ struct pc_state_t {
     } game;
 
     // Contains the screen's boundaries. Its main purpose is to stop the ball from getting out of boundaries.
-    pc_bbox window_b[4];
+    pc_rect window_b[4];
     // Background color.
     pc_color bg_color;
 
@@ -52,8 +49,7 @@ void pc_reset_game();
 int  pc_init(int argc, char** argv);
 void pc_quit();
 
-void pc_score(int points, score team);
-void pc_assign_point(int qnty);
+void pc_score(int amount, pc_teams team);
 // Updates the game's elements to the window size. This includes centering the ball, 
 // recalculating the players coordinates, resizing the screen's boundaries, among other things.
 void pc_update_window_size();

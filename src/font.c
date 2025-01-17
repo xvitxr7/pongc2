@@ -5,13 +5,35 @@
 
 struct pc_font pc_pong_sans;
 
+static struct pc_font* load_from_file(const char* path) {
+    struct pc_font* font = (struct pc_font*) malloc(sizeof(struct pc_font));
+    
+    FILE* file = fopen(path, "r");
+    if (!file) {
+        printf("Failed to load font from file. [%s]", path);
+        return NULL;
+    }
+
+    char c, *buffer = "\0";
+
+    do {
+        c = fgetc(file);
+        sprintf(buffer, "%s", &c);
+    } while (c != EOF);
+
+    printf(buffer);
+}
+
 void pc_init_font() {
+    
     for (int i = 0; i < PC_CHAR_COUNT; i++) {
         pc_pong_sans.chars[i] = 0;
 
         pc_pong_sans.indices[i].w = 3;
         pc_pong_sans.indices[i].h = 5;
     }
+
+    load_from_file("font.p2f");
 
     pc_pong_sans.chars['a'] = " * "
                               "* *"
@@ -429,4 +451,14 @@ void pc_draw_text(const char* _text, float _x, float _y, uint32_t _scale) {
         draw_char(c, _x, _y, scale);
         _x += scale_w + scale;
     }
+}
+
+float pc_text_length(const char* _text, uint32_t _scale) {
+    float total = 0;
+
+    for (int i = 0; i != strlen(_text); i++) {
+        total += (pc_pong_sans.indices[_text[i]].w + _scale) * _scale;
+    }
+
+    return total;
 }

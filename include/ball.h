@@ -7,7 +7,7 @@ typedef struct {
     float radius,
           ax, ay;
 
-    pc_bbox bbox;
+    pc_rect bbox;
 } pc_ball;
 
 pc_ball* pc_init_ball(float radius);

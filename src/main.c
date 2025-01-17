@@ -3,13 +3,20 @@
 #include "font.h"
 #include "player.h"
 #include "state.h"
+#include "ui.h"
 #include <SDL2/SDL_events.h>
 #include <SDL2/SDL_keycode.h>
 #include <SDL2/SDL_render.h>
 #include <SDL2/SDL_video.h>
-#include <string.h>
 
 struct pc_state_t pc_state;
+
+pc_rect    r = { 0, 0, 10, 30 };
+pc_color   white = { 255, 255, 255, 255 };
+pc_color   red = { 255, 0, 0, 255 };
+pc_color   green = { 0, 255, 0, 255 };
+pc_color   blue = { 0, 0, 255, 255 };
+pc_button* button;
 
 static void draw_middle_lines(int w, int h) {
   int ww, wh;
@@ -36,9 +43,9 @@ static void draw_bboxes() {
   }
 
   SDL_RenderDrawRectF(pc_state.renderer, &pc_state.game.ball->bbox);
-
+  
   for (int i = 0; i < 4; i++) {
-    const pc_bbox* bbox = &pc_state.window_b[i];
+    const pc_rect* bbox = &pc_state.window_b[i];
     SDL_SetRenderDrawColor(pc_state.renderer, 0, 0, 255, 255);
     SDL_RenderDrawRectF(pc_state.renderer, bbox);
   }
@@ -68,9 +75,10 @@ static const char* help_text = "ESC - Quits the game.\n"
                                "R   - Resets the game state.";
 
 static void render() {
+
   SDL_SetRenderDrawColor(pc_state.renderer, pc_state.bg_color.r, pc_state.bg_color.g, pc_state.bg_color.b, pc_state.bg_color.a);
   SDL_RenderClear(pc_state.renderer);
-
+  
   draw_middle_lines(10, 20);
 
   SDL_SetRenderDrawColor(pc_state.renderer, pc_state.bg_color.r + 255, pc_state.bg_color.g + 255, pc_state.bg_color.b + 255, pc_state.bg_color.a);
@@ -86,6 +94,10 @@ static void render() {
   pc_draw_ball();
   // Draw the players.
   draw_players();
+
+  if (pc_ui_button(pc_state.renderer, button)) {
+      printf("PEIDEI\n");
+  }
 
   if (pc_state.flags[PC_FLAG_DRAW_BBOXES])
     draw_bboxes();
@@ -104,6 +116,12 @@ static void update() {
 
 static void run() {
   pc_state.running = 1;
+
+  pc_ease_info* easing = (pc_ease_info*) malloc(sizeof(pc_ease_info));
+  easing->multiplier = 10.f;
+  easing->type = PC_EASING_IN;
+
+  button = pc_create_button(r, "click this button", "extra stuff here", red, red, 3, 10, easing);
 
   while (pc_state.running) {
     pc_handle_events();

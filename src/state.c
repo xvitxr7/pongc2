@@ -10,17 +10,18 @@
 #include <sys/types.h>
 
 static void random_window_name() {
-    char* rand_win_names[5] = {
+    char* rand_win_names[] = {
         "Cool asf!",
         "C is awesome",
         "the chaddest game",
         "better than tetris", // lol
-        "SDL rules!",
+        "still waiting for SDL3",
     };
 
+    // Dirtiest random seed ever
     int mx, my;
     SDL_GetGlobalMouseState(&mx, &my);
-    srand(mx * my);
+    srand(9999);
 
     char win_name[128];
     sprintf(win_name, "PongC - %s", rand_win_names[rand() % 5]);
@@ -58,7 +59,7 @@ static void init_game() {
     pc_spawn_ball(10);
 }
 
-void pc_reset_game() {
+void pc_reset_game() {  
     terminate_game();
     init_game();
     pc_update_window_size();
@@ -112,11 +113,11 @@ int pc_init(int argc, char** argv) {
 }
 
 void pc_quit() {
+    // This segfaults the application for some reason
+    // SDL_DestroyWindow(pc_state.window);
+    // SDL_DestroyRenderer(pc_state.renderer);
     SDL_Quit();
     TTF_Quit();
-
-    SDL_DestroyWindow(pc_state.window);
-    SDL_DestroyRenderer(pc_state.renderer);
 }
 
 pc_ball* pc_spawn_ball(float radius) {
@@ -124,9 +125,8 @@ pc_ball* pc_spawn_ball(float radius) {
     return pc_state.game.ball;
 }
 
-void pc_score(int points, pc_teams team)
-{
-    pc_state.game.teams[team]++;
+void pc_score(int amount, pc_teams team) {
+    pc_state.game.teams[team] += amount;
     pc_reset_game();
     printf("Player scored! [%ix%i]\n", pc_state.game.teams[0], pc_state.game.teams[1]);
 }
@@ -150,9 +150,9 @@ pc_player* pc_spawn_player(pc_player* _player) {
 
     _player->index = pc_state.game.players_idx;
 
-    // Checks if the player index is a modulus of 2. Is true, the side is right, else is left.
-    // This allows easy implementation of multiple players. (Not implemented yet)
-    _player->team = (_player->index + 1) % 2 != 0 ? PC_TEAM_RIGHT : PC_TEAM_LEFT;
+    // Checks if the player index is a modulus of 2. If true, the side is right, else, it is left.
+    // This allows easy implementation of multiple players. (Not implemented yet, how ironic)
+    _player->team = (_player->index + 1) % 2;
 
     adjust_player_position(_player);
 
@@ -162,7 +162,7 @@ pc_player* pc_spawn_player(pc_player* _player) {
     return _player;
 }
 
-void resize_screen_bb() {
+void resize_screen_boundaries() {
     int ww, wh;
     SDL_GetWindowSize(pc_state.window, &ww, &wh);
 
@@ -209,12 +209,11 @@ void pc_update_window_size() {
     }
 
     /* Ball */
-    if (!pc_state.game.started)
-    {
+    if (!pc_state.game.started) {
         pc_state.game.ball->bbox.x = ww / 2.f - pc_state.game.ball->bbox.w / 2;
         pc_state.game.ball->bbox.y = wh / 2.f - pc_state.game.ball->bbox.h / 2;
     }
 
-    /* Screen Boundaries Box */
-    resize_screen_bb();
+    /* Screen boundaries */
+    resize_screen_boundaries();
 }

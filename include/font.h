@@ -14,5 +14,6 @@ struct pc_font {
 // PongSans Font™
 extern struct pc_font pc_pong_sans;
 
-void pc_init_font();
-void pc_draw_text(const char* _text, float _x, float _y, uint32_t _scale);
+void  pc_init_font();
+void  pc_draw_text(const char* _text, float _x, float _y, uint32_t _scale);
+float pc_text_length(const char* _text, uint32_t _scale);

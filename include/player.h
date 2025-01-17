@@ -27,7 +27,7 @@ typedef enum {
 
 typedef struct {
     uint8_t   index;
-    pc_bbox bbox;
+    pc_rect bbox;
 
     pc_teams team;
 
