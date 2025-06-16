@@ -16,7 +16,7 @@ static void random_window_name() {
         "C is awesome",
         "the chaddest game",
         "better than tetris", // lol
-        "still waiting for SDL3",
+        "still waiting for SDL3", // oh well, who could've thought
     };
 
     srand(time(NULL));
