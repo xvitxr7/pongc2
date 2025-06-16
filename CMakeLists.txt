@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.5.0)
+cmake_minimum_required(VERSION 3.10.0)
 project(pongc VERSION 0.3.0
               LANGUAGES C
               HOMEPAGE_URL https://github.com/xvitxr7/pongc2
