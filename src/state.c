@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/types.h>
+#include <time.h>
 
 static void random_window_name() {
     char* rand_win_names[] = {
@@ -18,7 +19,7 @@ static void random_window_name() {
         "still waiting for SDL3",
     };
 
-    srand(9999);
+    srand(time(NULL));
 
     char win_name[128];
     sprintf(win_name, "PongC - %s", rand_win_names[rand() % 5]);
