@@ -8,15 +8,9 @@
 #include <SDL2/SDL_keycode.h>
 #include <SDL2/SDL_render.h>
 #include <SDL2/SDL_video.h>
+#include <stdio.h>
 
 struct pc_state_t pc_state;
-
-pc_rect    r = { 0, 0, 10, 30 };
-pc_color   white = { 255, 255, 255, 255 };
-pc_color   red = { 255, 0, 0, 255 };
-pc_color   green = { 0, 255, 0, 255 };
-pc_color   blue = { 0, 0, 255, 255 };
-pc_button* button;
 
 static void draw_middle_lines(int w, int h) {
   int ww, wh;
@@ -88,16 +82,12 @@ static void render() {
     int ww, wh;
     SDL_GetWindowSize(pc_state.window, &ww, &wh);
     SDL_SetRenderDrawColor(pc_state.renderer, pc_state.bg_color.r + 10, pc_state.bg_color.g + 10, pc_state.bg_color.b + 10, pc_state.bg_color.a);
-    pc_draw_text(help_text, ww / 2 + 10, wh - 50, 2);
+    pc_draw_text(help_text, ww / 2 + 10, wh - 50, 2); 
   }
 
   pc_draw_ball();
   // Draw the players.
   draw_players();
-
-  if (pc_ui_button(pc_state.renderer, button)) {
-      printf("PEIDEI\n");
-  }
 
   if (pc_state.flags[PC_FLAG_DRAW_BBOXES])
     draw_bboxes();
@@ -116,12 +106,6 @@ static void update() {
 
 static void run() {
   pc_state.running = 1;
-
-  pc_ease_info* easing = (pc_ease_info*) malloc(sizeof(pc_ease_info));
-  easing->multiplier = 10.f;
-  easing->type = PC_EASING_IN;
-
-  button = pc_create_button(r, "click this button", "extra stuff here", red, red, 3, 10, easing);
 
   while (pc_state.running) {
     pc_handle_events();
