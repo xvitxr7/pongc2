@@ -8,6 +8,7 @@ enum pc_easing {
 
 typedef struct {
 	int   type;
+	float index;
 	float multiplier;
 } pc_ease_info;
 
