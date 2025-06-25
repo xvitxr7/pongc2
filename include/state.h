@@ -40,11 +40,7 @@ struct pc_state_t {
 	// Current state.
 	int current;
 	struct {
-		struct {
-			pc_button* btn_start_game;
-			pc_button* btn_extras;
-			pc_button* btn_quit;
-		} main_menu;
+		pc_mainmenu_t* mainmenu;
 	} ui;
 
     // Contains the screen's boundaries. Its main purpose is to stop the ball from getting out of boundaries.
