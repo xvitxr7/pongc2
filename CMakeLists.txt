@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10.0)
-project(pongc VERSION 0.3.0
+project(pongc VERSION 1.0.0
               LANGUAGES C
               HOMEPAGE_URL https://github.com/xvitxr7/pongc2
               DESCRIPTION "An overengineered Pong clone made in C using SDL2."
