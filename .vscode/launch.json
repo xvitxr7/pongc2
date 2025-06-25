@@ -5,6 +5,7 @@
         "request": "launch",
         "name": "Launch",
         "preLaunchTask": "CMake: build",
+		"console": "internalConsole",
         "program": "${workspaceFolder}/bin/pongc",
         "args": [],
         "cwd": "${workspaceFolder}"

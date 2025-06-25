@@ -1,7 +1,8 @@
 {
     "cmake.buildDirectory": "${workspaceFolder}/bin",
+	"cmake.generator": "Unix Makefiles",
     "cmake.debugConfig": {
-        "console": "internalConsole",
+        "console": "externalTerminal",
         "args": [
             "--draw-bboxes"
         ]

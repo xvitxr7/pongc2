@@ -4,6 +4,7 @@
 
 #include "player.h"
 #include "ball.h"
+#include "ui.h"
 
 #define PC_PLAYER_LIMIT 2
 #define PC_FLAGS_COUNT 2 // Placeholder
@@ -12,6 +13,11 @@
 #define PC_FLAG_DEBUG_FONT 1
 
 #define PC_HAS_OPT(str, opt) strcmp(str, opt) > 0
+
+enum pc_game_state {
+	PC_GAMESTATE_MAINMENU,
+	PC_GAMESTATE_INGAME
+};
 
 struct pc_state_t {
     SDL_Window*   window;
@@ -30,6 +36,16 @@ struct pc_state_t {
         // Left is index 0 and right is index 1.
         score teams[2];
     } game;
+
+	// Current state.
+	int current;
+	struct {
+		struct {
+			pc_button* btn_start_game;
+			pc_button* btn_extras;
+			pc_button* btn_quit;
+		} main_menu;
+	} ui;
 
     // Contains the screen's boundaries. Its main purpose is to stop the ball from getting out of boundaries.
     pc_rect window_b[4];
