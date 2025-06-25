@@ -2,6 +2,7 @@
 #include "ball.h"
 #include "font.h"
 #include "player.h"
+#include "ui.h"
 #include <SDL2/SDL_render.h>
 #include <SDL2/SDL_video.h>
 #include <SDL_mouse.h>
@@ -99,6 +100,9 @@ int pc_init(int argc, char** argv) {
     for (int i = 0; i < PC_FLAGS_COUNT; i++) {
         pc_state.flags[i] = 0;
     }
+
+	pc_state.ui.mainmenu = pc_create_mainmenu(pc_state.window);
+	pc_state.current = PC_GAMESTATE_MAINMENU;
 
     process_opts(argc, argv);
 
