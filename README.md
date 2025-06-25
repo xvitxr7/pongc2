@@ -2,5 +2,4 @@
 
 PongC² is an overengineered Pong clone built using SDL2 and pure C.
 
-Good luck trying to build it.
-I'm too lazy to write instructions right now.
+Archived because this is dead. Not working on it anymore. (need to move on. a pong clone isnt exactly a thrilling project)
