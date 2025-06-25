@@ -19,7 +19,7 @@ static void ease_impl(float* v, float t, int type, float mul, float* index) {
 	}
 }
 
-int pc_ease_in(float* v, float t, pc_ease_info* i) {
+int pc_ease_in(float* v, float t, pc_easing_info_t* i) {
 	if (*v >= t)
 	{
 		i->index = 0;
@@ -36,7 +36,7 @@ int pc_ease_in(float* v, float t, pc_ease_info* i) {
 	return 1;
 }
 
-int pc_ease_out(float* v, float t, pc_ease_info* i) {
+int pc_ease_out(float* v, float t, pc_easing_info_t* i) {
 	if (*v <= t)
 	{
 		i->index = 0;

@@ -10,9 +10,9 @@ typedef struct {
 	int   type;
 	float index;
 	float multiplier;
-} pc_ease_info;
+} pc_easing_info_t;
 
 // For increasing values.
-int pc_ease_in(float* v, float t, pc_ease_info* i);
+int pc_ease_in(float* v, float t, pc_easing_info_t* i);
 // For decreasing values.
-int pc_ease_out(float* v, float t, pc_ease_info* i);
+int pc_ease_out(float* v, float t, pc_easing_info_t* i);
