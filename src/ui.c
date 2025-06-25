@@ -10,17 +10,20 @@ pc_button* pc_create_button(pc_button_info* info) {
 
 	if (!button) return button;
 
-	button->bbox = info->bbox;
+	button->bbox.x = info->x;
+	button->bbox.y = info->y;
 
 	button->text  = info->text;
 	button->extra = info->extra;
 
 	button->font_scale = info->font_scale;
 
-	button->min_w  = pc_text_length(button->text, button->font_scale) + 20;
+	const int len = pc_text_length(button->text, button->font_scale);
+
+	button->min_w  = len * 2;
 	button->bbox.w = button->min_w;
-	button->max_w  = button->bbox.w + pc_text_length(button->extra, button->font_scale) / 1.2f;
-	button->bbox.h = info->bbox.h;
+	button->max_w  = pc_text_length(button->extra, button->font_scale) + len * 3 + 100;
+	button->bbox.h = info->font_scale * 10;
 
 	memcpy(&button->colors, &info->colors, sizeof(pc_button_colors_t));
 
@@ -88,7 +91,7 @@ int pc_ui_button(SDL_Renderer* renderer, pc_button* button) {
 
 	int is_max_w = button->bbox.w >= button->max_w;
 	if (is_max_w)
-		pc_draw_text(button->extra, button->bbox.x + pc_text_length(button->text, button->font_scale) + 10, button->bbox.y + ((float) button->bbox.h / 2) - ((float) button->font_scale / 2), button->font_scale);
+		pc_draw_text(button->extra, button->bbox.x + pc_text_length(button->text, button->font_scale) * 2, button->bbox.y + ((float) button->bbox.h / 2) - ((float) button->font_scale / 2), button->font_scale);
 
 
 	return update_button(button);
@@ -104,7 +107,7 @@ pc_mainmenu_t* pc_create_mainmenu(SDL_Window* window)
 	pc_button_colors_t common_colors = {
 		.accent = { 255, 255, 255, 255 }, // white
 		.click = { 255, 255, 255, 255 }, // white
-		.hover = { 100, 100, 100, 255 }, // light gray
+		.hover = { 0, 255, 0, 255 }, // green
 		.background = { 0, 255, 0, 255 }, // green
 		.foreground = { 0, 0, 0, 255 } // black
 	};
@@ -121,26 +124,28 @@ pc_mainmenu_t* pc_create_mainmenu(SDL_Window* window)
 			"Start game",
 			"Starts a new Pong game",
 			.colors = common_colors,
-			.sharpness = 5,
+			.sharpness = 10,
 			.easing = easing_info,
-			.font_scale = 10
+			.font_scale = 5
 		};
 
 		menu->btn_start_game = pc_create_button(&info);
 
-		info.y += 50;
+		info.y += menu->btn_start_game->bbox.h;
 		info.text = "Extras";
 		info.extra = "More stuff!";
 		info.colors.background.g = 0;
 		info.colors.background.b = 255;
+		info.colors.hover = info.colors.background;
 
 		menu->btn_extras = pc_create_button(&info);
 
-		info.y += 50;
+		info.y += menu->btn_extras->bbox.h;
 		info.text = "Quit";
 		info.extra = "See you next time!";
 		info.colors.background.b = 0;
 		info.colors.background.r = 255;
+		info.colors.hover = info.colors.background;
 
 		menu->btn_quit = pc_create_button(&info);
 	}
@@ -155,6 +160,9 @@ int pc_ui_mainmenu(SDL_Renderer* renderer, pc_mainmenu_t* menu)
 
 	if (pc_ui_button(renderer, menu->btn_start_game))
 		return PC_MAINMENU_START;
+
+	if (pc_ui_button(renderer, menu->btn_extras))
+		return PC_MAINMENU_EXTRAS;
 
 	if (pc_ui_button(renderer, menu->btn_quit))
 		return PC_MAINMENU_QUIT;

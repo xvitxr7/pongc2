@@ -457,7 +457,7 @@ float pc_text_length(const char* _text, uint32_t _scale) {
     float total = 0;
 
     for (int i = 0; i != strlen(_text); i++) {
-        total += (pc_pong_sans.indices[_text[i]].w + _scale) * _scale;
+        total += (pc_pong_sans.indices[_text[i]].w) * _scale;
     }
 
     return total;

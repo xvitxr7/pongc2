@@ -68,6 +68,7 @@ enum pc_mainmenu_return_codes
 {
 	PC_MAINMENU_NONE,
 	PC_MAINMENU_START,
+	PC_MAINMENU_EXTRAS,
 	PC_MAINMENU_QUIT
 };
 

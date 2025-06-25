@@ -68,31 +68,52 @@ static const char* help_text = "ESC - Quits the game.\n"
                                "X   - Locks the ball to the mouse position.\n"
                                "R   - Resets the game state.";
 
+static void render_game() {	
+	draw_middle_lines(10, 20);
+	
+	SDL_SetRenderDrawColor(pc_state.renderer, pc_state.bg_color.r + 255, pc_state.bg_color.g + 255, pc_state.bg_color.b + 255, pc_state.bg_color.a);
+	pc_draw_text("! PongC2 - made by @xvitxr7 !", 10, 10, 2);
+	
+	{
+	  int ww, wh;
+	  SDL_GetWindowSize(pc_state.window, &ww, &wh);
+	  SDL_SetRenderDrawColor(pc_state.renderer, pc_state.bg_color.r + 10, pc_state.bg_color.g + 10, pc_state.bg_color.b + 10, pc_state.bg_color.a);
+	  pc_draw_text(help_text, ww / 2 + 10, wh - 50, 2); 
+	}
+	
+	pc_draw_ball();
+	// Draw the players.
+	draw_players();
+	
+	if (pc_state.flags[PC_FLAG_DRAW_BBOXES])
+	  draw_bboxes();
+}
+
+static void render_mainmenu() {
+	int r = pc_ui_mainmenu(pc_state.renderer, pc_state.ui.mainmenu);
+
+	if (r == PC_MAINMENU_START)
+		pc_state.current = PC_GAMESTATE_INGAME;
+
+	if (r == PC_MAINMENU_QUIT)
+		pc_state.running = 0;
+}
+
 static void render() {
+	SDL_SetRenderDrawColor(pc_state.renderer, pc_state.bg_color.r, pc_state.bg_color.g, pc_state.bg_color.b, pc_state.bg_color.a);
+	SDL_RenderClear(pc_state.renderer);
 
-  SDL_SetRenderDrawColor(pc_state.renderer, pc_state.bg_color.r, pc_state.bg_color.g, pc_state.bg_color.b, pc_state.bg_color.a);
-  SDL_RenderClear(pc_state.renderer);
-  
-  draw_middle_lines(10, 20);
+	switch (pc_state.current) {
+		case PC_GAMESTATE_INGAME:
+			render_game();
+			break;
+		
+		case PC_GAMESTATE_MAINMENU:
+			render_mainmenu();
+			break;
+	}
 
-  SDL_SetRenderDrawColor(pc_state.renderer, pc_state.bg_color.r + 255, pc_state.bg_color.g + 255, pc_state.bg_color.b + 255, pc_state.bg_color.a);
-  pc_draw_text("! PongC2 - made by @xvitxr7 !", 10, 10, 2);
-  
-  {
-    int ww, wh;
-    SDL_GetWindowSize(pc_state.window, &ww, &wh);
-    SDL_SetRenderDrawColor(pc_state.renderer, pc_state.bg_color.r + 10, pc_state.bg_color.g + 10, pc_state.bg_color.b + 10, pc_state.bg_color.a);
-    pc_draw_text(help_text, ww / 2 + 10, wh - 50, 2); 
-  }
-
-  pc_draw_ball();
-  // Draw the players.
-  draw_players();
-
-  if (pc_state.flags[PC_FLAG_DRAW_BBOXES])
-    draw_bboxes();
-
-  SDL_RenderPresent(pc_state.renderer);
+	SDL_RenderPresent(pc_state.renderer);
 }
 
 static void update() {
